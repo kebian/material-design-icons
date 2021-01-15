@@ -65,6 +65,6 @@ const importLists = () => {
     fs.writeFileSync(`${dataDir}/icons.js`, iconString)
 }
 
-//updateFromGit()
-//importFonts()
+updateFromGit()
+importFonts()
 importLists()
