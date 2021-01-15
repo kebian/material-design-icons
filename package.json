@@ -1,5 +1,5 @@
 {
-  "name": "material-design-icons",
+  "name": "@kebian/material-design-icons",
   "version": "1.0.0",
   "description": "Google's Material Design Icons",
   "module": "index",
@@ -7,8 +7,15 @@
     "build": "node scripts/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kebian/material-design-icons.git"
+  },
   "author": "Rob Stiles",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kebian/material-design-icons/issues"
+  },
   "devDependencies": {
     "ttf2eot": "^2.0.0",
     "ttf2woff": "^2.0.2",
