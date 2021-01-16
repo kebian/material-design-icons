@@ -11,6 +11,14 @@
     "type": "git",
     "url": "git+https://github.com/kebian/material-design-icons.git"
   },
+  "keywords": [
+    "icons",
+    "material",
+    "material-design",
+    "google",
+    "json",
+    "list"
+  ],
   "author": "Rob Stiles",
   "license": "MIT",
   "bugs": {
