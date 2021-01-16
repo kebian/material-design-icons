@@ -1,6 +1,6 @@
 {
   "name": "@kebian/material-design-icons",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Google's Material Design Icons",
   "module": "index",
   "scripts": {

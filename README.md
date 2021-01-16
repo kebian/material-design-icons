@@ -7,10 +7,10 @@ Also exports icon and category lists.
 
 ## Example Sass Usage
 ```scss
-@import '~material-design-icons/scss/material-design-icons';
+@import '@kebian/material-design-icons/scss/material-design-icons';
 ```
 
 ## Example JS usage
 ```javascript
-import {icons, categories} from 'material-design-icons'
+import {icons, categories} from '@kebian/material-design-icons'
 ```
