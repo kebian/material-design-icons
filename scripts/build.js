@@ -1,7 +1,7 @@
-const fs = require('fs');
+const fs = require('fs')
 const path = require('path')
 const ttf2woff2 = require('ttf2woff2')
-const { execSync } = require("child_process");
+const { execSync } = require("child_process")
 const gitFolder = 'material-design-icons'
 const fontsFolder = 'fonts'
 const dataDir = 'data'
