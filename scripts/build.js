@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path')
 const ttf2woff2 = require('ttf2woff2')
 const { execSync } = require("child_process");
-
 const gitFolder = 'material-design-icons'
 const fontsFolder = 'fonts'
 const dataDir = 'data'
@@ -26,10 +25,9 @@ const importFonts = () => {
             fs.copyFileSync(`${gitFolder}/font/${filename}`, `${fontsFolder}/${filename}`)
         
             const basename = path.basename(filename, path.extname(filename))
+            const input = fs.readFileSync(`${fontsFolder}/${filename}`)
 
-            let input = fs.readFileSync(`${fontsFolder}/${filename}`)
             fs.writeFileSync(`${fontsFolder}/${basename}.woff2`, ttf2woff2(input))
-
             execSync(`ttf2eot ${filename} ${basename}.eot`, {cwd: fontsFolder})
             execSync(`ttf2woff ${filename} ${basename}.woff`, {cwd: fontsFolder})   
         }
@@ -39,8 +37,8 @@ const importFonts = () => {
 const buildLists = () => {
     const categories = []
     const icons = []
-
     const srcDir = fs.readdirSync(`${gitFolder}/src`)
+
     for (const categoryName of srcDir) {
         const categoryIcons = []
         const catDir = fs.readdirSync(`${gitFolder}/src/${categoryName}`)
