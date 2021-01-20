@@ -1,2 +1,2 @@
-export {default as categories} from './data/categories'
-export {default as icons} from './data/icons'
+module.exports.categories = require('./data/categories')
+module.exports.icons = require('./data/icons')

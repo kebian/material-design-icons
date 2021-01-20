@@ -1,11 +1,12 @@
 {
   "name": "@kebian/material-design-icons",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Google's Material Design Icons",
-  "module": "index",
+  "main": "./index.js",
+  "module": "./esm.mjs",
   "scripts": {
-    "build": "node scripts/build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "node scripts/build.js",
+    "test": "node tests/cjs.js && node tests/mjs.mjs"
   },
   "repository": {
     "type": "git",
@@ -27,9 +28,7 @@
   "devDependencies": {
     "ttf2eot": "^2.0.0",
     "ttf2woff": "^2.0.2",
-    "ttf2woff2": "^4.0.1"
-  },
-  "dependencies": {
+    "ttf2woff2": "^4.0.1",
     "json-beautify": "^1.1.1"
   }
 }

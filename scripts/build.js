@@ -58,8 +58,8 @@ const buildLists = () => {
 const importLists = () => {
     console.log('Importing icon lists...')
     const [categories, icons] = buildLists()
-    const catSting = 'export default ' + beautify(categories, null, 2, 80)
-    const iconString = 'export default ' + beautify(icons, null, 2, 80)
+    const catSting = 'module.exports = ' + beautify(categories, null, 2, 80)
+    const iconString = 'module.exports = ' + beautify(icons, null, 2, 80)
     fs.writeFileSync(`${dataDir}/categories.js`, catSting)
     fs.writeFileSync(`${dataDir}/icons.js`, iconString)
 }
