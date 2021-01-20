@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const beautify = require("json-beautify")
 const ttf2woff2 = require('ttf2woff2')
 const { execSync } = require("child_process")
 const gitFolder = 'material-design-icons'
@@ -57,8 +58,8 @@ const buildLists = () => {
 const importLists = () => {
     console.log('Importing icon lists...')
     const [categories, icons] = buildLists()
-    const catSting = 'export default ' + JSON.stringify(categories)
-    const iconString = 'export default ' + JSON.stringify(icons)
+    const catSting = 'export default ' + beautify(categories, null, 2, 80)
+    const iconString = 'export default ' + beautify(icons, null, 2, 80)
     fs.writeFileSync(`${dataDir}/categories.js`, catSting)
     fs.writeFileSync(`${dataDir}/icons.js`, iconString)
 }
