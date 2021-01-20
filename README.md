@@ -12,5 +12,19 @@ Also exports icon and category lists.
 
 ## Example JS usage
 ```javascript
-import {icons, categories} from '@kebian/material-design-icons'
+import { icons } from '@kebian/material-design-icons'
+
+icons.forEach(icon => console.log('Icon name: ' + icon))
+```
+
+```javascript
+import { twotone, categories } from '@kebian/material-design-icons'
+
+categories.forEach(category => {
+    category.icons.forEach(icon => {
+        if (twotone.includes(icon)) {
+            console.log(`Category ${category.name} has a twotone ${icon} icon`)
+        }
+    })
+})
 ```

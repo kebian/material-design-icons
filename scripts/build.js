@@ -6,6 +6,7 @@ const { execSync } = require("child_process")
 const gitFolder = 'material-design-icons'
 const fontsFolder = 'fonts'
 const dataDir = 'data'
+const iconTypes = ['icons', 'outlined', 'round', 'sharp', 'twotone']
 
 const updateFromGit = () => {
     if (fs.existsSync(gitFolder)) {
@@ -20,15 +21,15 @@ const updateFromGit = () => {
 
 const importFonts = () => {
     console.log("Importing fonts...")
-    const dir = fs.readdirSync(`${gitFolder}/font`)
+    const dir = fs.readdirSync(`${gitFolder}${path.sep}font`)
     for (const filename of dir) {
         if (filename.endsWith('.ttf')) {
-            fs.copyFileSync(`${gitFolder}/font/${filename}`, `${fontsFolder}/${filename}`)
-        
-            const basename = path.basename(filename, path.extname(filename))
-            const input = fs.readFileSync(`${fontsFolder}/${filename}`)
+            fs.copyFileSync(path.join(gitFolder, 'font', filename), path.join(fontsFolder, filename))
 
-            fs.writeFileSync(`${fontsFolder}/${basename}.woff2`, ttf2woff2(input))
+            const basename = path.basename(filename, path.extname(filename))
+            const input = fs.readFileSync(path.join(fontsFolder, filename))
+
+            fs.writeFileSync(path.join(fontsFolder, `${basename}.woff2`), ttf2woff2(input))
             execSync(`ttf2eot ${filename} ${basename}.eot`, {cwd: fontsFolder})
             execSync(`ttf2woff ${filename} ${basename}.woff`, {cwd: fontsFolder})   
         }
@@ -37,15 +38,20 @@ const importFonts = () => {
 
 const buildLists = () => {
     const categories = []
-    const icons = []
-    const srcDir = fs.readdirSync(`${gitFolder}/src`)
+    const icons = {}
+    iconTypes.forEach(type => icons[type] = [])
+    const srcDir = fs.readdirSync(path.join(gitFolder, 'src'))
 
     for (const categoryName of srcDir) {
         const categoryIcons = []
-        const catDir = fs.readdirSync(`${gitFolder}/src/${categoryName}`)
+        const catPath = path.join(gitFolder, 'src', categoryName)
+        const catDir = fs.readdirSync(catPath)
         for (const iconName of catDir) {
             categoryIcons.push(iconName)
-            icons.push(iconName)
+            iconTypes.forEach(type => {
+                const typeDirPath = type == 'icons' ? 'materialicons' : `materialicons${type}`
+                if (fs.existsSync(path.join(catPath, iconName, typeDirPath))) icons[type].push(iconName)
+            })
         }
         categories.push({
             name: categoryName,
@@ -55,13 +61,26 @@ const buildLists = () => {
     return [categories, icons]
 }
 
+const exportData = (name, data) => {
+    const s = 'module.exports = ' + beautify(data, null, 2, 0)
+    fs.writeFileSync(`${dataDir}${path.sep}${name}.js`, s)
+}
+
 const importLists = () => {
     console.log('Importing icon lists...')
     const [categories, icons] = buildLists()
-    const catSting = 'module.exports = ' + beautify(categories, null, 2, 80)
-    const iconString = 'module.exports = ' + beautify(icons, null, 2, 80)
-    fs.writeFileSync(`${dataDir}/categories.js`, catSting)
-    fs.writeFileSync(`${dataDir}/icons.js`, iconString)
+    let indexJs = ''
+    let indexMjs = ''
+    iconTypes.forEach(type => {
+        exportData(type, icons[type])
+        indexJs += `module.exports.${type} = require('./${type}.js')\n`
+        indexMjs += `export { default as ${type} } from './${type}.js'\n`
+    })
+    exportData('categories', categories)
+    indexJs += "module.exports.categories = require('./categories.js')\n"
+    indexMjs += "export { default as categories } from './categories.js'\n"
+    fs.writeFileSync(path.join(dataDir, 'index.js'), indexJs)
+    fs.writeFileSync(path.join(dataDir, 'index.mjs'), indexMjs)
 }
 
 updateFromGit()

@@ -1,2 +1,1 @@
-module.exports.categories = require('./data/categories')
-module.exports.icons = require('./data/icons')
+module.exports = require('./data/index')
