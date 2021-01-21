@@ -1,10 +1,10 @@
 {
   "name": "@kebian/material-design-icons",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Google's Material Design Icons",
   "exports": {
-      "require": "./index.js",
-      "import": "./index.mjs"
+    "require": "./index.js",
+    "import": "./index.mjs"
   },
   "scripts": {
     "prepare": "node scripts/build.js",
@@ -28,9 +28,9 @@
     "url": "https://github.com/kebian/material-design-icons/issues"
   },
   "devDependencies": {
+    "json-beautify": "^1.1.1",
     "ttf2eot": "^2.0.0",
     "ttf2woff": "^2.0.2",
-    "ttf2woff2": "^4.0.1",
-    "json-beautify": "^1.1.1"
+    "ttf2woff2": "^4.0.1"
   }
 }

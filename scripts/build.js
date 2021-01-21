@@ -19,21 +19,32 @@ const updateFromGit = () => {
     }
 }
 
+const generateFontsFromTtf = filename => {
+    const shortname = path.basename(filename)
+    const basename = path.basename(filename, path.extname(filename))
+    const filePath = path.dirname(filename)
+    const input = fs.readFileSync(filename)
+    fs.writeFileSync(path.join(filePath, `${basename}.woff2`), ttf2woff2(input))
+    execSync(`ttf2eot ${shortname} ${basename}.eot`, {cwd: filePath})
+    execSync(`ttf2woff ${shortname} ${basename}.woff`, {cwd: filePath})   
+}
+
 const importFonts = () => {
     console.log("Importing fonts...")
-    const dir = fs.readdirSync(`${gitFolder}${path.sep}font`)
-    for (const filename of dir) {
-        if (filename.endsWith('.ttf')) {
-            fs.copyFileSync(path.join(gitFolder, 'font', filename), path.join(fontsFolder, filename))
+    const dedupe = arr => [... new Set(arr)]
+    const basenames = dedupe(fs.readdirSync(path.join(gitFolder, 'font')).map(filename => path.basename(filename, path.extname(filename))))
+    const sourceFolder = path.join(gitFolder, 'font')
 
-            const basename = path.basename(filename, path.extname(filename))
-            const input = fs.readFileSync(path.join(fontsFolder, filename))
-
-            fs.writeFileSync(path.join(fontsFolder, `${basename}.woff2`), ttf2woff2(input))
-            execSync(`ttf2eot ${filename} ${basename}.eot`, {cwd: fontsFolder})
-            execSync(`ttf2woff ${filename} ${basename}.woff`, {cwd: fontsFolder})   
+    basenames.forEach(basename => {
+        if (fs.existsSync(path.join(sourceFolder, `${basename}.ttf`))) {
+            const destinationTtf = path.join(fontsFolder, `${basename}.ttf`)
+            fs.copyFileSync(path.join(sourceFolder, `${basename}.ttf`), destinationTtf)
+            generateFontsFromTtf(destinationTtf)
         }
-    }
+        else if (fs.existsSync(path.join(sourceFolder, `${basename}.otf`))) {
+            fs.copyFileSync(path.join(sourceFolder, `${basename}.otf`), path.join(fontsFolder, `${basename}.otf`))
+        }
+    })
 }
 
 const buildLists = () => {
